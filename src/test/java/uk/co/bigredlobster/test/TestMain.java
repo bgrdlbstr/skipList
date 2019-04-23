@@ -12,8 +12,8 @@ public class TestMain {
     @Test
     public void testIts2k() throws InterruptedException {
         var data = new Data<Integer>();
-        var publisher1 = new Publisher(data, 20, 1000);
-        var publisher2 = new Publisher(data, 20, 1000);
+        var publisher1 = new Publisher(new SleepyPublisher(data, 20, 1000));
+        var publisher2 = new Publisher(new SleepyPublisher(data, 20, 1000));
 
         var threadPoolExecutor = Executors.newFixedThreadPool(2);
         Future<?> submit = threadPoolExecutor.submit(publisher1);

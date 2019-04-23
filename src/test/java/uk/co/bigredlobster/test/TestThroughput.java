@@ -12,8 +12,8 @@ public class TestThroughput {
     @Test
     public void testIts200k() throws InterruptedException {
         var data = new Data<Integer>();
-        var publisher1 = new Publisher(data, 0, 100_000);
-        var publisher2 = new Publisher(data, 0, 100_000);
+        var publisher1 = new Publisher(new SleepyPublisher(data, 0, 100_000));
+        var publisher2 = new Publisher(new SleepyPublisher(data, 0, 100_000));
 
         var threadPoolExecutor = Executors.newFixedThreadPool(2);
         Future<?> submit = threadPoolExecutor.submit(publisher1);
