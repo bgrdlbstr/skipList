@@ -1,18 +1,19 @@
 package uk.co.bigredlobster.test;
 
+import org.junit.Test;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class Main {
-    public static void main(String[] args) throws InterruptedException {
-        final var m = new Main();
-        m.doIt();
-    }
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-    private void doIt() throws InterruptedException {
+public class TestMain {
+    @Test
+    public void testIts2k() throws InterruptedException {
         var data = new Data<Integer>();
-        var publisher1 = new Publisher(data);
-        var publisher2 = new Publisher(data);
+        var publisher1 = new Publisher(data, 20, 1000);
+        var publisher2 = new Publisher(data, 20, 1000);
 
         var threadPoolExecutor = Executors.newFixedThreadPool(2);
         Future<?> submit = threadPoolExecutor.submit(publisher1);
@@ -24,5 +25,8 @@ public class Main {
         }
 
         System.out.println("END " + data.getData());
+
+        int expected = 2_000 - publisher1.getDupes().size() - publisher2.getDupes().size();
+        assertThat(data.getSize(), is(expected));
     }
 }
